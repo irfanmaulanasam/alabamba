@@ -1,18 +1,45 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+  <WithSidebar>
+    <div class="columns" v-if="false">
+      <div class="column is-full">
+        Promo
+      </div>
+    </div>
+    <ProductsList :title="'Catalog'" :products="products"/>
+  </WithSidebar>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+import HelloWorld from '@/components/HelloWorld.vue';
+import ProductsList from '@/components/products/ProductsList';
+import Carousel from '@/components/Carousel.vue';
 
 export default {
-  name: 'home',
+  name: 'HomePage',
+  data() {
+    return {
+      products: new Array(5),
+    };
+  },
+  mounted() {
+    this.$parent.bgNavbar = 'transparent';
+    this.$api
+      .get('/products')
+      .then(({ data }) => {
+        this.products = data;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  },
   components: {
-    HelloWorld
-  }
-}
+    HelloWorld,
+    ProductsList,
+    Carousel,
+  },
+};
 </script>
+
+<style scoped lang="scss">
+
+</style>
