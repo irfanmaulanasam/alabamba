@@ -20,21 +20,22 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 
-const indexRouter = require('./routes/index');
-const usersRouter = require('./routes/users');
 
 const app = express();
 
 app
-    .use(require('cors')())
-    .use(logger('dev'))
-    .use(express.json())
-    .use(express.urlencoded({ extended: false }))
-    .use(cookieParser())
-    .use(express.static(path.join(__dirname, 'public')))
-    .use(require('./middlewares/customValidator'));
+  .use(require('cors')())
+  .use(logger('dev'))
+  .use(express.json())
+  .use(express.urlencoded({extended: true}))
+  .use(cookieParser())
+  .use(express.static(path.join(__dirname, 'public')))
+  .use(require('./middlewares/customValidator'));
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
-
+app
+  .use('/auth', require('./routes/auth'))
+  .use('/products', require('./routes/products'))
+  .use('/carts', require('./routes/carts'))
+  .use('/', require('./routes/index'));
+  
 module.exports = app;
